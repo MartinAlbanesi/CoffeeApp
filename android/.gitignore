@@ -116,6 +116,7 @@ obj/
 .idea/gradle.xml
 .idea/jarRepositories.xml
 .idea/navEditor.xml
+.idea/inspectionProfiles/
 
 # Legacy Eclipse project files
 .classpath
