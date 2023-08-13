@@ -2,4 +2,5 @@
 <resources>
 
     <style name="Theme.CoffeeApp" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.MyApp" parent="android:ThemeOverlay.Material.Dark"/>
 </resources>

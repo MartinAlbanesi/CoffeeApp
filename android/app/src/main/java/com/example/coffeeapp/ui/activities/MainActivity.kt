@@ -1,5 +1,6 @@
-package com.example.coffeeapp
+package com.example.coffeeapp.ui.activities
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -7,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -26,15 +26,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.coffeeapp.ui.theme.CoffeeAppTheme
-import com.example.coffeeapp.ui.theme.CustomHorizontalGrid
+import com.example.coffeeapp.ui.composables.CustomHorizontalGrid
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CoffeeAppTheme {
+            CoffeeAppTheme(darkTheme = true) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -42,6 +41,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     CoffeeMakersMenu()
                 }
+
             }
         }
     }
@@ -56,6 +56,7 @@ fun CoffeeMakersMenu() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
 fun ScaffoldWithTopBar() {
     Scaffold(
         topBar = {
@@ -66,12 +67,12 @@ fun ScaffoldWithTopBar() {
                 },
                 navigationIcon = {
                     IconButton(onClick = {}) {
-                        Icon(Icons.Filled.Menu, "menuIcon")
+                        Icon(Icons.Filled.Menu, "menuIcon", tint = MaterialTheme.colorScheme.secondary)
                     }
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = Color.White,
+                    titleContentColor = MaterialTheme.colorScheme.secondary,
                 ),
             )
         }, content = {
@@ -80,7 +81,7 @@ fun ScaffoldWithTopBar() {
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize()
-                    .background(Color(0xff8d6e63)),
+                    .background(MaterialTheme.colorScheme.background),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -90,10 +91,17 @@ fun ScaffoldWithTopBar() {
         })
 }
 
-@Preview(showBackground = true)
+
+@Preview(name="Light Mode", showBackground = true)
+@Preview(uiMode= Configuration.UI_MODE_NIGHT_YES, showBackground = true, name = "Dark Mode")
 @Composable
-fun GreetingPreview() {
+fun CoffeeAppPreview() {
     CoffeeAppTheme {
-        CoffeeMakersMenu()
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            CoffeeMakersMenu()
+        }
     }
 }
