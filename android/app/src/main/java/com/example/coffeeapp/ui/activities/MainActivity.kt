@@ -2,8 +2,10 @@ package com.example.coffeeapp.ui.activities
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.coffeeapp.data.repositories.MockCoffeeMakersRepository
+import com.example.coffeeapp.di.MainApplication
 import com.example.coffeeapp.domain.GetCoffeMakersUseCase
 import com.example.coffeeapp.ui.theme.CoffeeAppTheme
 import com.example.coffeeapp.ui.composables.CustomHorizontalGrid
@@ -35,14 +38,12 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MainActivity @Inject constructor(): ComponentActivity() {
+class MainActivity: ComponentActivity() {
+
+    private val coffeeMakersViewModel: CoffeeMakersViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-//PROBLEMAS CON VIEW MODEL, NO SE INYECTA CORRECTAMENTE Y NO SE PUEDE PROBAR LA APP.
-// val coffeeMakersVM: CoffeeMakersViewModel = CoffeeMakersViewModel(GetCoffeMakersUseCase(MockCoffeeMakersRepository()))
-        val coffeeMakersVM = CoffeeMakersViewModel(GetCoffeMakersUseCase(MockCoffeeMakersRepository()))
 
         setContent {
             CoffeeAppTheme(darkTheme = true) {
@@ -51,9 +52,8 @@ class MainActivity @Inject constructor(): ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CoffeeMakersMenu(coffeeMakersVM)
+                    CoffeeMakersMenu(coffeeMakersViewModel)
                 }
-
             }
         }
     }

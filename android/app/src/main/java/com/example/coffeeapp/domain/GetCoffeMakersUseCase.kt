@@ -5,4 +5,5 @@ import javax.inject.Inject
 
 class GetCoffeMakersUseCase @Inject constructor(private val repository: CoffeeMakersRepository){
     suspend operator fun invoke() = repository.listCoffeeMakers()
+
 }
