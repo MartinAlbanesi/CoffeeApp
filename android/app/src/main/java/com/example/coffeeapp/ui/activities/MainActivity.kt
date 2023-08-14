@@ -24,14 +24,26 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.coffeeapp.data.repositories.MockCoffeeMakersRepository
+import com.example.coffeeapp.domain.GetCoffeMakersUseCase
 import com.example.coffeeapp.ui.theme.CoffeeAppTheme
 import com.example.coffeeapp.ui.composables.CustomHorizontalGrid
+import com.example.coffeeapp.ui.viewmodels.CoffeeMakersViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class MainActivity : ComponentActivity() {
+
+@AndroidEntryPoint
+class MainActivity @Inject constructor(): ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+//PROBLEMAS CON VIEW MODEL, NO SE INYECTA CORRECTAMENTE Y NO SE PUEDE PROBAR LA APP.
+// val coffeeMakersVM: CoffeeMakersViewModel = CoffeeMakersViewModel(GetCoffeMakersUseCase(MockCoffeeMakersRepository()))
+        val coffeeMakersVM = CoffeeMakersViewModel(GetCoffeMakersUseCase(MockCoffeeMakersRepository()))
+
         setContent {
             CoffeeAppTheme(darkTheme = true) {
                 // A surface container using the 'background' color from the theme
@@ -39,7 +51,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CoffeeMakersMenu()
+                    CoffeeMakersMenu(coffeeMakersVM)
                 }
 
             }
@@ -48,16 +60,16 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun CoffeeMakersMenu() {
+fun CoffeeMakersMenu(coffeeMakersVM: CoffeeMakersViewModel) {
     Box {
-        ScaffoldWithTopBar()
+        ScaffoldWithTopBar(coffeeMakersVM)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
-fun ScaffoldWithTopBar() {
+fun ScaffoldWithTopBar(coffeeMakersVM: CoffeeMakersViewModel) {
     Scaffold(
         topBar = {
             // TopAppBar with navigation icon and title
@@ -85,23 +97,26 @@ fun ScaffoldWithTopBar() {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                CustomHorizontalGrid(items = listOf("1", "2", "3", "4", "5", "6"))
-                CustomHorizontalGrid(items = listOf("1", "2", "3", "4", "5", "6"))
+                CustomHorizontalGrid(coffeeMakersVM)
             }
         })
 }
-
 
 @Preview(name="Light Mode", showBackground = true)
 @Preview(uiMode= Configuration.UI_MODE_NIGHT_YES, showBackground = true, name = "Dark Mode")
 @Composable
 fun CoffeeAppPreview() {
+
+    val mockCoffeeMakersRepository = MockCoffeeMakersRepository()
+    val getCoffeMakersUseCase = GetCoffeMakersUseCase(mockCoffeeMakersRepository)
+    val viewModel = CoffeeMakersViewModel(getCoffeMakersUseCase)
+
     CoffeeAppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            CoffeeMakersMenu()
+            CoffeeMakersMenu(viewModel)
         }
     }
 }

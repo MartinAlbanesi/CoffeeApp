@@ -22,10 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.coffeeapp.data.repositories.MockCoffeeMakersRepository
+import com.example.coffeeapp.domain.GetCoffeMakersUseCase
 import com.example.coffeeapp.ui.theme.CoffeeAppTheme
+import com.example.coffeeapp.ui.viewmodels.CoffeeMakersViewModel
 
 @Composable
-fun CustomHorizontalGrid(items: List<String>) {
+fun CustomHorizontalGrid (coffeeMakersVM: CoffeeMakersViewModel) {
+    val coffeeMakersList = coffeeMakersVM.allCoffeeMakersList
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -54,7 +58,31 @@ fun CustomHorizontalGrid(items: List<String>) {
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             content = {
-                items(items.size) { i ->
+                if (coffeeMakersList.isNotEmpty()) {
+                    coffeeMakersList.forEach { name ->
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .width(170.dp)
+                                    .padding(8.dp)
+                                    .clip(RoundedCornerShape(5.dp))
+                                    .background(MaterialTheme.colorScheme.secondary)
+                                    .clickable {
+                                        Log.d("CoffeeApp", "Item $name clicked")
+                                    },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "Item $name",
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
+                    }
+                }
+
+                /*
+                items(coffeeMakersList.size) {
                     Box(
                         modifier = Modifier
                             .width(170.dp)
@@ -62,24 +90,31 @@ fun CustomHorizontalGrid(items: List<String>) {
                             .clip(RoundedCornerShape(5.dp))
                             .background(MaterialTheme.colorScheme.secondary)
                             .clickable {
-                                Log.d("CoffeeApp", "Item ${i + 1} clicked")
+                                Log.d("CoffeeApp", "Item ${it + 1} clicked")
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(text = "Item ${items[i]}", color = MaterialTheme.colorScheme.onSurface)
+                        Text(text = "Item ${it}", color = MaterialTheme.colorScheme.onSurface)
                     }
                 }
+                */
+
             }
         )
     }
 }
 
 
-@Preview(name="Light Mode", showBackground = true)
-@Preview(uiMode= Configuration.UI_MODE_NIGHT_YES, showBackground = true, name = "Dark Mode")
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, name = "Dark Mode")
 @Composable
 fun CoffeeAppPreview() {
+
+    val mockCoffeeMakersRepository = MockCoffeeMakersRepository()
+    val getCoffeMakersUseCase = GetCoffeMakersUseCase(mockCoffeeMakersRepository)
+    val viewModel = CoffeeMakersViewModel(getCoffeMakersUseCase)
+
     CoffeeAppTheme {
-        CustomHorizontalGrid(items = listOf("1", "2", "3", "4", "5", "6", "7", "8", "9"))
+        CustomHorizontalGrid(viewModel)
     }
 }
