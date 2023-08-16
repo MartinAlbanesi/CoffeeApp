@@ -22,13 +22,14 @@ private val DarkColorScheme = darkColorScheme(
     tertiary = FlatWhite,
     background = LongBlack,
     surface = EspressoBrown,
+    onSecondary = LongBlack,
     onSurface = MochaChocolate //Optional
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = EspressoBrown, //
-    secondary = CappuccinoCream,
-    tertiary = LongBlack,
+    secondary = LongBlack,
+    tertiary = CappuccinoCream,
     background = FlatWhite, //
     surface = MochaChocolate,
     onSurface = MochaChocolate //Optional

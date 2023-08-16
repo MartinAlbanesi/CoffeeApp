@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -77,27 +78,21 @@ fun CustomHorizontalGrid (coffeeMakersVM: CoffeeMakersViewModel) {
                                     .background(MaterialTheme.colorScheme.secondary)
                                     .clickable {
                                         Log.d("CoffeeApp", "Item ${coffeeMaker.name} clicked")
-                                    },
-                                contentAlignment = Alignment.TopCenter
+                                    }
                             ) {
-                                ImageLoader(coffeeMaker.imageUrl)
-
-                                Log.d("ImageLoader", "Item ${coffeeMaker.imageUrl} loaded")
-
-                                Surface(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .align(Alignment.BottomCenter),
-                                    border = BorderStroke(2.dp, Color.Black)
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
+                                    ImageLoader(coffeeMaker.imageUrl)
+                                    Spacer(modifier = Modifier.height(8.dp))
                                     Text(
-                                        text = "Item ${coffeeMaker.name}",
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        modifier = Modifier
-                                            .align(Alignment.Center)
+                                        text = coffeeMaker.name,
+                                        color = MaterialTheme.colorScheme.onSecondary
                                     )
                                 }
-
+                                //TEST LOG
+                                Log.d("ImageLoader", "Item ${coffeeMaker.name} loaded")
                             }
                         }
                     }
