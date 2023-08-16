@@ -1,18 +1,13 @@
-package com.example.coffeeapp.ui.composables
+package com.example.coffeeapp.ui.composables.home
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,6 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.ImageLoader
 import com.example.coffeeapp.data.repositories.MockCoffeeMakersRepository
 import com.example.coffeeapp.domain.GetCoffeMakersUseCase
@@ -34,7 +30,7 @@ import com.example.coffeeapp.ui.viewmodels.CoffeeMakersViewModel
 import com.skydoves.landscapist.coil.CoilImage
 
 @Composable
-fun CustomHorizontalGrid (coffeeVM: CoffeeMakersViewModel) {
+fun CustomHorizontalGrid (navController: NavHostController, coffeeVM: CoffeeMakersViewModel) {
     val coffeeMakersList = coffeeVM.allCoffeeMakersList
     Column(
         modifier = Modifier
@@ -67,30 +63,10 @@ fun CustomHorizontalGrid (coffeeVM: CoffeeMakersViewModel) {
                 if (coffeeMakersList.isNotEmpty()) {
                     coffeeMakersList.forEach { coffeeMaker ->
                         item {
-                            Box(
-                                modifier = Modifier
-                                    .width(170.dp)
-                                    .padding(8.dp)
-                                    .clip(RoundedCornerShape(5.dp))
-                                    .background(MaterialTheme.colorScheme.secondary)
-                                    .clickable {
-                                        Log.d("CoffeeApp", "Item ${coffeeMaker.name} clicked")
-                                    }
-                            ) {
-                                Column(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    ImageLoader(coffeeMaker.imageUrl)
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                    Text(
-                                        text = coffeeMaker.name,
-                                        color = MaterialTheme.colorScheme.onSecondary
-                                    )
-                                }
-                                //TEST LOG
-                                Log.d("ImageLoader", "Item ${coffeeMaker.name} loaded")
-                            }
+                            CoffeeMakerListItem(
+                                coffeeMaker,
+                                navController
+                            )
                         }
                     }
                 }
@@ -126,6 +102,6 @@ fun CoffeeAppPreview() {
     val viewModel = CoffeeMakersViewModel(getCoffeMakersUseCase)
 
     CoffeeAppTheme {
-        CustomHorizontalGrid(viewModel)
+        //CustomHorizontalGrid(navController, viewModel)
     }
 }

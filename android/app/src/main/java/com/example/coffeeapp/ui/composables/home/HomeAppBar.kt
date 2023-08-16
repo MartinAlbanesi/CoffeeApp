@@ -1,4 +1,4 @@
-package com.example.coffeeapp.ui.composables
+package com.example.coffeeapp.ui.composables.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,11 +18,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import com.example.coffeeapp.ui.viewmodels.CoffeeMakersViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScaffoldWithTopBar(coffeeMakersVM: CoffeeMakersViewModel) {
+fun ScaffoldWithTopBar(navController: NavHostController, coffeeMakersVM: CoffeeMakersViewModel) {
     Scaffold(
         topBar = {
             // TopAppBar with navigation icon and title
@@ -50,7 +51,7 @@ fun ScaffoldWithTopBar(coffeeMakersVM: CoffeeMakersViewModel) {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                CustomHorizontalGrid(coffeeMakersVM)
+                CustomHorizontalGrid(navController, coffeeMakersVM)
                 //CustomHorizontalGrid(coffeeMakersVM)
             }
         })
